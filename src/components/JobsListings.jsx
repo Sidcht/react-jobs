@@ -2,25 +2,34 @@ import { useState, useEffect } from "react";
 import React from "react";
 import JobListing from "./JobListing";
 import Spinner from "./Spinner";
+import supabase from "../lib/supabase";
 const JobsListings = ({ isHome = false }) => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchJobs = async () => {
-      const apiURL = isHome;
       try {
-        const res = await fetch("/api/jobs");
-        const data = await res.json();
-        setJobs(isHome ? data.slice(0, 3) : data);
+        let query = supabase.from("jobs").select("*");
+
+        if (isHome) {
+          query = query.limit(3);
+        }
+
+        const { data, error } = await query;
+
+        if (error) throw error;
+
+        setJobs(data);
       } catch (error) {
-        console.log("Error fetching data", error);
+        console.error("Error fetching jobs:", error);
       } finally {
         setLoading(false);
       }
     };
+
     fetchJobs();
-  }, []);
+  }, [isHome]);
 
   return (
     <section className="bg-blue-50 px-4 py-10">

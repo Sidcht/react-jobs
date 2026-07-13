@@ -7,10 +7,10 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "server": "json-server --watch src/jobs.json --port 8000"
+    "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.110.1",
     "@tailwindcss/vite": "^4.3.2",
     "bootstrap": "^5.3.8",
     "react": "^19.2.7",
@@ -31,7 +31,6 @@
     "eslint-plugin-react-refresh": "^0.5.3",
     "globals": "^17.7.0",
     "json": "^11.0.0",
-    "json-server": "^1.0.0-beta.15",
     "server": "^1.0.42",
     "vite": "^8.1.1"
   }

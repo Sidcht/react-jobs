@@ -16,7 +16,7 @@ const AddJobPage = ({ addJobSubmit }) => {
 
   const navigate = useNavigate();
 
-  const submitForm = (e) => {
+  const submitForm = async (e) => {
     e.preventDefault();
 
     const newJob = {
@@ -25,16 +25,16 @@ const AddJobPage = ({ addJobSubmit }) => {
       location,
       description,
       salary,
-      company: {
-        name: companyName,
-        description: companyDescription,
-        contactEmail,
-        contactPhone,
-      },
+      company_name: companyName,
+      company_description: companyDescription,
+      contact_email: contactEmail,
+      contact_phone: contactPhone,
     };
-    addJobSubmit(newJob);
+
+    await addJobSubmit(newJob);
+
     toast.success("Job Added");
-    return navigate("/jobs");
+    navigate("/jobs");
   };
   return (
     <>

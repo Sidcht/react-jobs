@@ -10,37 +10,40 @@ const EditJobPage = ({ updateJobSubmit }) => {
   const [location, setLocation] = useState(job.location);
   const [description, setDescription] = useState(job.description);
   const [salary, setSalary] = useState(job.salary);
-  const [companyName, setCompanyName] = useState(job.company.name);
-  const [companyDescription, setCompanyDescription] = useState(
-    job.company.description,
-  );
-  const [contactEmail, setContactEmail] = useState(job.company.contactEmail);
-  const [contactPhone, setContactPhone] = useState(job.company.contactPhone);
 
+  const [companyName, setCompanyName] = useState(job.company_name);
+  const [companyDescription, setCompanyDescription] = useState(
+    job.company_description,
+  );
+  const [contactEmail, setContactEmail] = useState(job.contact_email);
+  const [contactPhone, setContactPhone] = useState(job.contact_phone);
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const submitForm = (e) => {
+  const submitForm = async (e) => {
     e.preventDefault();
 
     const updatedJob = {
-      id,
+      id: Number(job.id), // or Number(id)
       title,
       type,
       location,
       description,
       salary,
-      company: {
-        name: companyName,
-        description: companyDescription,
-        contactEmail,
-        contactPhone,
-      },
+      company_name: companyName,
+      company_description: companyDescription,
+      contact_email: contactEmail,
+      contact_phone: contactPhone,
     };
-    updateJobSubmit(updatedJob);
+
+    console.log("updatedJob:", updatedJob);
+
+    await updateJobSubmit(updatedJob);
+
     toast.success("Job Updated");
-    return navigate(`/jobs/${id}`);
+    navigate(`/jobs/${job.id}`);
   };
+
   return (
     <section className="bg-indigo-50">
       <div className="container m-auto max-w-2xl py-24">

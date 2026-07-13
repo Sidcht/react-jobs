@@ -12,38 +12,54 @@ import NotFoundPage from "./pages/NotFoundPage";
 import JobPage, { jobLoader } from "./pages/JobPage";
 import AddJobPage from "./pages/AddJobPage";
 import EditJobPage from "./pages/EditJobPage";
+import supabase from "./lib/supabase";
 
 const App = () => {
-  //Add New Job
+  // Add New Job
   const addJob = async (newJob) => {
-    const res = await fetch("/api/jobs", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newJob),
-    });
-    return;
+    console.log("Adding:", newJob);
+
+    const { data, error } = await supabase
+      .from("jobs")
+      .insert([newJob])
+      .select();
+
+    console.log("Data:", data);
+    console.log("Error:", error);
+
+    if (error) {
+      console.error(error);
+      throw error;
+    }
   };
 
-  //Delete Job
+  // Delete Job
   const deleteJob = async (id) => {
-    const res = await fetch(`/api/jobs/${id}`, {
-      method: "DELETE",
-    });
-    return;
+    const { error } = await supabase.from("jobs").delete().eq("id", id);
+
+    if (error) {
+      console.error(error);
+      throw error;
+    }
   };
 
-  //Update Job
+  // Update Job
   const updateJob = async (job) => {
-    const res = await fetch(`/api/jobs/${job.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(job),
-    });
-    return;
+    const { id, ...updatedFields } = job;
+
+    const { data, error } = await supabase
+      .from("jobs")
+      .update(updatedFields)
+      .eq("id", id)
+      .select();
+
+    console.log("Data:", data);
+    console.log("Error:", error);
+
+    if (error) {
+      console.error(error);
+      throw error;
+    }
   };
   const router = createBrowserRouter(
     createRoutesFromElements(
