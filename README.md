@@ -7,10 +7,11 @@ A modern job listing application built with React and Vite.
 - Browse job listings
 - View job details
 - Add new jobs
-- Edit existing jobs
+- Read jobs
+- Update existing jobs
 - Delete jobs
 - Responsive UI
-- Toast notifications
+- Persistent cloud database with Supabase
 
 ## Built With
 
@@ -18,9 +19,8 @@ A modern job listing application built with React and Vite.
 - Vite
 - React Router
 - Tailwind CSS
-- JSON Server
+- Supabase
 - React Icons
-- React Toastify
 
 ## Screenshots
 
