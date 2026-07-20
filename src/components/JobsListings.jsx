@@ -3,15 +3,31 @@ import React from "react";
 import JobListing from "./JobListing";
 import Spinner from "./Spinner";
 import supabase from "../lib/supabase";
+import SearchBar from "./SearchBar";
+
 const JobsListings = ({ isHome = false }) => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedsearchTerm, setDebouncedSearchTerm] = useState("");
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchTerm]);
+  useEffect(() => {
     const fetchJobs = async () => {
       try {
         let query = supabase.from("jobs").select("*");
-
+        if (debouncedsearchTerm.trim() != "") {
+          query = query.or(
+            `title.ilike.%${debouncedsearchTerm}%,description.ilike.%${debouncedsearchTerm}%,company_name.ilike.%${debouncedsearchTerm}%,location.ilike.%${debouncedsearchTerm}`,
+          );
+        }
         if (isHome) {
           query = query.limit(3);
         }
@@ -29,11 +45,12 @@ const JobsListings = ({ isHome = false }) => {
     };
 
     fetchJobs();
-  }, [isHome]);
+  }, [debouncedsearchTerm, isHome]);
 
   return (
     <section className="bg-blue-50 px-4 py-10">
       <div className="container-xl lg:container m-auto">
+        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         <h2 className="text-3xl font-bold text-indigo-500 mb-6 text-center">
           {isHome ? "Recent Jobs" : "Browse Jobs"}
         </h2>
